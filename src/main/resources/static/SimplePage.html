@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>reCAPTCHA demo: Simple page</title>
+    </meta>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script type="text/javascript">
+        var recaptcha_response ="";
+        var form = new FormData();
+        var verifyCallback = function(response) {
+            recaptcha_response = response;
+            console.log(recaptcha_response);
+        };
+        var postRequest = function() {
+            form.append("email", $(".eamil").val());
+            form.append("password", $(".psw").val());
+            form.append("ReCatcha", recaptcha_response.toString());
+            console.log(form);
+            var settings = {
+                "async": true,
+                "url": "http://localhost:8080/rest/",
+                "method": "POST",
+                "processData": false,
+                "contentType": false,
+                "mimeType": "multipart/form-data",
+                "data": form
+            }
+            $.ajax(settings).done(function (response) {
+                alert(response);
+            });
+        };
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="g-recaptcha" data-sitekey="PleaseReplaceThisWithTheRealSiteKey" data-callback="verifyCallback"></div>
+
+    <label><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" class="eamil" required ="true"></input>
+
+    <label><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" class="psw" required ="true"></input>
+
+    <button onclick="postRequest()">Login</button>
+</div>
+</body>
+</html>
